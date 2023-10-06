@@ -2,16 +2,9 @@ import axios from "axios"
 
 const apiKey = "yQn0L1akGvnnJ1pDfFsF5qNXtJLxUOR3AOVWUkeo"
 
-async function getApi() {
+async function getApi(URL) {
     try {
-      const response = await axios.get("https://api.nasa.gov/neo/rest/v1/feed", {
-        params: {
-          start_date: "2015-09-07",
-          end_date: "2015-09-08",
-          api_key: apiKey,
-        },
-      });
-
+      const response = await axios.get(URL + apiKey)
       return response.data;
     } catch (error) {
       console.error(error);
