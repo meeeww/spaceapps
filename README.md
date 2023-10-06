@@ -1,2 +1,2 @@
 # spaceapps
-Hola
+npm i
