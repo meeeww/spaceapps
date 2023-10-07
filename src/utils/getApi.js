@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const apiKey = "yQn0L1akGvnnJ1pDfFsF5qNXtJLxUOR3AOVWUkeo"
+const apiKey = "s8hLyxEgHEWdP9TfTiK5GSa9Z9wPgzvvU0MasncT"
 
 async function getApi(URL) {
     try {
