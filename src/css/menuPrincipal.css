@@ -28,6 +28,7 @@
   border: 1px solid white;
   color: white;
   border-radius: 1rem;
+  cursor: pointer;
 }
 
 .menuPrincipal h1 {

@@ -6,7 +6,11 @@ async function getFondo() {
     const date = urlParams.get("date");
     var formattedDate = new Date(date);
     const today = new Date();
-    while (formattedDate.getFullYear() !== 2020 || formattedDate > today) {
+    while (
+      formattedDate.getFullYear() < 2020 ||
+      formattedDate > today ||
+      formattedDate.getFullYear() > 2023
+    ) {
       formattedDate = new Date("2019-12-31");
       formattedDate.setDate(
         formattedDate.getDate() + Math.floor(Math.random() * 365)
