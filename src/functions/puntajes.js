@@ -1,7 +1,7 @@
 export default function puntajes() {
   var incremento = 0;
   var nivel = 1;
-  setInterval(function () {
+  var intervalId = setInterval(function () {
     if (incremento % 20 == 0 && incremento >= 20) {
       document.getElementById("indicadorNivel").innerHTML = "Nivel: " + nivel++;
     }
