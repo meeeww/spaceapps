@@ -28,7 +28,6 @@
           preload: preload,
           create: create,
           update: update,
-          GameOverScene: GameOverScene,
         },
       };
 
@@ -37,7 +36,8 @@
       var projectile;
       var lastAsteroide = 0;
       var lastDisparo = 0;
-      const cooldownAsteroides = 750;
+      var velocidadRotacion = 0.03
+      const cooldownAsteroides = 1500;
       const cooldownDisparos = 300;
       var cursors = {
         left: null,
@@ -70,7 +70,7 @@
         // planet.create(400, 300, 'planet').setScale(6).refreshBody();
         // planet.setCircle(100, 400, 300)
 
-        player = this.physics.add.sprite(400, 180, "dude");
+        player = this.physics.add.sprite(400, 240, "dude");
 
         player.setCollideWorldBounds(true);
 
@@ -84,7 +84,7 @@
         return proyectil; // Devuelve el proyectil creado
       }
 
-      function spawnProjectile(physics) {
+      function spawnProjectile(physics, scene, gameOver) {
         var numberRandom = Math.floor(Math.random() * 4);
         var x; // Posición X
         var y; // Posición Y
@@ -117,12 +117,15 @@
         var velocityX = velocity * Math.cos(angle); // Velocidad en el eje X para moverlo hacia el centro
         var velocityY = velocity * Math.sin(angle); // Velocidad en el eje Y para moverlo hacia el centro
 
+        function eliminarProjectile(projectile, planet) {
+          gameOver.visible = true;
+          scene.pause();
+        }
+
         projectile = crearProjectile(x, y, physics);
         physics.add.collider(projectile, planet, eliminarProjectile);
         projectile.setVelocity(velocityX, velocityY);
       }
-
-      function eliminarProjectile(projectile, planet) {}
 
       function disparar(x, y, physics) {
         let cohete = physics.add.sprite(player.x, player.y, "star");
@@ -144,13 +147,13 @@
         planet.body.y = 300;
         if (cursors.right.isDown) {
           let angle = Math.atan2(player.y - 300, player.x - 400);
-          angle += 0.03; // Ajusta la velocidad de rotación
+          angle += velocidadRotacion; // Ajusta la velocidad de rotación
 
           player.x = 400 + 60 * Math.cos(angle);
           player.y = 300 + 60 * Math.sin(angle);
         } else if (cursors.left.isDown) {
           let angle = Math.atan2(player.y - 300, player.x - 400);
-          angle -= 0.03; // Ajusta la velocidad de rotación
+          angle -= velocidadRotacion; // Ajusta la velocidad de rotación
 
           player.x = 400 + 60 * Math.cos(angle);
           player.y = 300 + 60 * Math.sin(angle);
@@ -172,23 +175,13 @@
           }
         }
 
+        this.gameOverText = this.add.text(400, 300, "Game Over", { fontSize: "64px", fill: "#ffffff" }).setOrigin(0.5);
+        this.gameOverText.visible = false;
         if (this.time.now > lastAsteroide + cooldownAsteroides) {
-          spawnProjectile(this.physics);
+          spawnProjectile(this.physics, this.scene, this.gameOverText);
           lastAsteroide = this.time.now;
         }
       }
-
-      //game over
-      var GameOverScene = new Phaser.Class({
-        Extends: Phaser.Scene,
-        initialize: function GameOverScene() {
-          Phaser.Scene.call(this, { key: "GameOverScene" });
-        },
-        create: function () {
-          // Código para mostrar la pantalla de Game Over
-          this.add.text(400, 300, "Game Over", { fontSize: "64px", fill: "#fff" }).setOrigin(0.5);
-        },
-      });
     </script>
   </body>
 </html>
