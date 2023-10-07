@@ -46,6 +46,8 @@ async function crearAsteroide() {
   } catch (error) {
     console.error(error);
   }
+
+  return asteroidList
 }
 
 crearAsteroide();
