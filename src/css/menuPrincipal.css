@@ -88,3 +88,64 @@ i {
 #close.active {
   transform: translateY(0%);
 }
+
+.gameOver {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.gameOver h1 {
+  font-family: fantasy;
+  font-size: 4rem;
+  color: red;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.gameOver p {
+  font-size: 1.5rem;
+}
+
+.gameOver button {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background-color: #3498db;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+#puntajeFinal {
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+.infoBox {
+  background-color: rgba(255, 255, 255, 1); /* Color blanco con transparencia */
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  margin-top: 100px;
+}
+
+.infoBox h2 {
+  font-size: 1.5rem;
+  color: black;
+}
+
+.infoBox p {
+  font-size: 1rem;
+  color: black;
+}
