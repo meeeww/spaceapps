@@ -1,0 +1,151 @@
+.infoPartida {
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  color: white;
+  transform: translateY(-100%);
+  transition: all 0.3s ease-out;
+  position: relative;
+}
+
+.infoPartida.active {
+  transform: translateY(0%);
+}
+
+.partida {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.partida img {
+  width: 50%;
+}
+
+.partida p {
+  margin-top: 2rem;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  color: white;
+}
+
+#presionaJugar {
+  -webkit-animation: pulsate 3s ease-out;
+  -webkit-animation-iteration-count: infinite;
+  opacity: 0.5;
+}
+
+@-webkit-keyframes pulsate {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.configPartida {
+  height: 10vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  transform: translateY(0%);
+  transition: all 0.3s ease-out;
+}
+
+.configPartida.active {
+  transform: translateY(100%);
+}
+
+i {
+  font-size: 1.4rem;
+  color: white;
+}
+
+#close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  padding: 1rem;
+  padding: 1.3rem;
+  cursor: pointer;
+  z-index: 50;
+  transform: translateY(-100%);
+  transition: all 0.3s ease-out;
+}
+
+#close.active {
+  transform: translateY(0%);
+}
+
+.gameOver {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.gameOver h1 {
+  font-family: fantasy;
+  font-size: 4rem;
+  color: red;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.gameOver p {
+  font-size: 1.5rem;
+}
+
+.gameOver button {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background-color: #3498db;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+#puntajeFinal {
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+.infoBox {
+  background-color: rgba(255, 255, 255, 1); /* Color blanco con transparencia */
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  margin-top: 100px;
+}
+
+.infoBox h2 {
+  font-size: 1.5rem;
+  color: black;
+}
+
+.infoBox p {
+  font-size: 1rem;
+  color: black;
+}

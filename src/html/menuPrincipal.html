@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+    <link rel="stylesheet" href="../css/menuPrincipal.css" />
+    <link rel="stylesheet" href="../css/estilosGenerales.css" />
+    <link rel="stylesheet" href="../css/leaderboard.css" />
+    <script
+      src="https://kit.fontawesome.com/9e87e4d4e8.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="menuPrincipal container">
+      <header class="infoPartida">
+        <p id="indicadorNivel">Nivel: 1</p>
+        <p id="score">Score: 1</p>
+      </header>
+      <div class="partida">
+        <img
+          src="https://i.pinimg.com/originals/ab/a5/bd/aba5bdbb6a5985ffdf4a73d1729b609a.png"
+          alt=""
+        />
+        <p id="presionaJugar">Presiona para jugar</p>
+      </div>
+      <div class="gameOver">
+        <h1>¡Game Over!</h1>
+        <p>Score: <span id="puntajeFinal">0</span></p>
+        
+        <div class="infoBox">
+          <h2>Nombre asteroide</h2>
+          <p>Velocidad: </p>
+          <p>Tamaño: </p>
+        </div>
+      </div>
+      
+      <footer class="configPartida">
+        <button><i class="fa-solid fa-ranking-star"></i></button>
+        <button><i class="fa-solid fa-bolt"></i></button>
+      </footer>
+      <div class="leaderboard">
+        <a href="#" id="closeLead"
+          ><i class="fa-regular fa-circle-xmark"></i
+        ></a>
+        <ul class="leaderboardList">
+          <li>
+            <h3>Jugador 1</h3>
+            <p>Puntuación</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+  <head>
+    <script src="../functions/startGame.js"></script>
+    <script src="../functions/GameOver.js"></script>
+    <script src="../functions/leaderboard.js"></script>
+  </head>
+</html>
