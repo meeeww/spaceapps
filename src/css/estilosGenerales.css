@@ -22,6 +22,7 @@ h1 {
   background-image: url("../assets/fondo.png");
   background-repeat: no-repeat;
   background-size: cover;
+  position: relative;
 }
 
 a {
