@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
     <link rel="stylesheet" href="../css/menuPrincipal.css" />
     <link rel="stylesheet" href="../css/estilosGenerales.css" />
     <script
@@ -26,6 +28,17 @@
         />
         <p id="presionaJugar">Presiona para jugar</p>
       </div>
+      <div class="gameOver">
+        <h1>¡Game Over!</h1>
+        <p>Score: <span id="puntajeFinal">0</span></p>
+        
+        <div class="infoBox">
+          <h2>Nombre asteroide</h2>
+          <p>Velocidad: </p>
+          <p>Tamaño: </p>
+        </div>
+      </div>
+      
       <footer class="configPartida">
         <button><i class="fa-solid fa-ranking-star"></i></button>
         <button><i class="fa-solid fa-bolt"></i></button>
@@ -34,5 +47,6 @@
   </body>
   <head>
     <script src="../functions/startGame.js"></script>
+    <script src="../functions/GameOver.js"></script>
   </head>
 </html>
