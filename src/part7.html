@@ -85,7 +85,7 @@
 
         function crearProjectile(x, y, physics) {
             let proyectil = physics.add.sprite(x, y, 'planet');
-            proyectil.setBounce(1)
+            proyectil.setBounce(10)
             asteroidesGroup.add(proyectil)
             return proyectil; // Devuelve el proyectil creado
         }
@@ -118,7 +118,7 @@
             }
 
             var angle = Math.atan2(300 - y, 400 - x); // Ángulo hacia el centro
-            var velocity = 200; // Velocidad constante
+            var velocity = 100; // Velocidad constante
 
             var velocityX = velocity * Math.cos(angle); // Velocidad en el eje X para moverlo hacia el centro
             var velocityY = velocity * Math.sin(angle); // Velocidad en el eje Y para moverlo hacia el centro
@@ -138,10 +138,14 @@
             cohete.x = player.x;
             cohete.y = player.y;
 
-            physics.add.collider(cohete, asteroidesGroup)
+            physics.add.collider(cohete, asteroidesGroup, destruirCohete)
 
             physics.moveTo(cohete, x, y, 200);
 
+        }
+
+        function destruirCohete(cohete){
+            cohete.destroy() ;
         }
 
 
