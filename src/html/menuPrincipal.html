@@ -6,18 +6,31 @@
     <title>Document</title>
     <link rel="stylesheet" href="../css/menuPrincipal.css" />
     <link rel="stylesheet" href="../css/estilosGenerales.css" />
+    <script
+      src="https://kit.fontawesome.com/9e87e4d4e8.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <div class="menuPrincipal container">
-      <h1>NOMBRE DEL JUEGO</h1>
-      <div class="botonesMenuPrincipal">
-        <a href="#"><button id="jugar">JUGAR</button></a>
-        <a href="#"><button id="niveles">NIVELES</button></a>
+      <header class="infoPartida">
+        <p id="indicadorNivel"></p>
+        <p id="score"></p>
+      </header>
+      <div class="partida">
+        <img
+          src="https://i.pinimg.com/originals/ab/a5/bd/aba5bdbb6a5985ffdf4a73d1729b609a.png"
+          alt=""
+        />
+        <p id="presionaJugar">Presiona para jugar</p>
       </div>
+      <footer class="configPartida">
+        <button><i class="fa-solid fa-ranking-star"></i></button>
+        <button><i class="fa-solid fa-bolt"></i></button>
+      </footer>
     </div>
   </body>
   <head>
-    <script type="module" src="../functions/fondoDiario.js"></script>
-    <script src="../functions/jugarBoton.js"></script>
+    <script src="../functions/startGame.js"></script>
   </head>
 </html>

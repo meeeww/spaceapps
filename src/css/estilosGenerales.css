@@ -14,14 +14,23 @@ h1 {
 }
 
 .container {
-  width: 800px;
+  width: 475px;
   height: 100vh;
   margin: 0 auto;
   background-size: cover;
   background-repeat: no-repeat;
+  background-image: url("../assets/fondo.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 a {
   color: white;
   text-decoration: none;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
 }
