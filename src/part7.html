@@ -12,7 +12,10 @@
   </head>
 
   <body>
-    <script type="text/javascript">
+    <script type="module">
+      import crearAsteroide from "./functions/setAsteroides.js";
+
+      let array = await crearAsteroide();
       var config = {
         type: Phaser.AUTO,
         width: 800,
@@ -36,7 +39,7 @@
       var projectile;
       var lastAsteroide = 0;
       var lastDisparo = 0;
-      var velocidadRotacion = 0.03
+      var velocidadRotacion = 0.03;
       const cooldownAsteroides = 1500;
       const cooldownDisparos = 300;
       var cursors = {
@@ -111,11 +114,21 @@
             break;
         }
 
+        const randomAsteroidIndex = Math.floor(Math.random() * array.length);
+        const randomAsteroid = array[randomAsteroidIndex];
+
         var angle = Math.atan2(300 - y, 400 - x); // Ángulo hacia el centro
         var velocity = 100; // Velocidad constante
 
-        var velocityX = velocity * Math.cos(angle); // Velocidad en el eje X para moverlo hacia el centro
-        var velocityY = velocity * Math.sin(angle); // Velocidad en el eje Y para moverlo hacia el centro
+        // Set the velocity of the projectile based on the asteroid's velocity
+        var velocityX =
+          randomAsteroid.getVelocidad() / 100 > 200
+            ? (randomAsteroid.getVelocidad() / 300) * Math.cos(angle)
+            : (randomAsteroid.getVelocidad() / 100) * Math.cos(angle); // Velocidad en el eje X para moverlo hacia el centro
+        var velocityY =
+          randomAsteroid.getVelocidad() / 100 > 200
+            ? (randomAsteroid.getVelocidad() / 300) * Math.sin(angle)
+            : (randomAsteroid.getVelocidad() / 100) * Math.cos(angle); // Velocidad en el eje Y para moverlo hacia el centro
 
         function eliminarProjectile(projectile, planet) {
           gameOver.visible = true;
