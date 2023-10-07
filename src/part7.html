@@ -31,7 +31,6 @@
                 preload: preload,
                 create: create,
                 update: update
-
             }
         };
 
@@ -40,7 +39,7 @@
         var cursors;
         var projectile;
         var lastProjectile = 0;
-        const cooldown = 1000;
+        const cooldown = 500;
 
         var game = new Phaser.Game(config);
 
@@ -48,20 +47,20 @@
             this.load.image('sky', 'assets/sky.png');
             this.load.image('ground', 'assets/platform.png');
             this.load.image('star', 'assets/star.png');
-            this.load.image('planet', 'assets/bomb.png');
+            this.load.spritesheet('planet', 'assets/bomb.png', { frameWidth: 32, frameHeight: 48 });
             this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
         }
 
         function create() {
             this.add.image(400, 300, 'sky');
-            console.log(game.config.width, game.config.height);
 
-            // projectile = this.physics.add.sprite();
-            // projectile.create(100, 100, 'planet').setScale(2).refreshBody();
 
-            planet = this.physics.add.staticGroup();
+            planet = this.physics.add.sprite(400, 300, 'planet');
+            planet.setScale(6);
 
-            planet.create(400, 300, 'planet').setScale(6).refreshBody();
+
+            // planet.create(400, 300, 'planet').setScale(6).refreshBody();
+            // planet.setCircle(100, 400, 300)
 
             player = this.physics.add.sprite(400, 180, 'dude');
 
@@ -94,13 +93,35 @@
 
         function crearProjectile(x, y, physics) {
             let proyectil = physics.add.sprite(x, y, 'planet');
-
             return proyectil; // Devuelve el proyectil creado
         }
 
         function spawnProjectile(physics) {
-            var x = Phaser.Math.Between(-30, (game.config.width + 30));  // Posición X aleatoria
-            var y = Phaser.Math.Between(-30, game.config.height + 30);  // Posición Y aleatoria
+            var numberRandom = Math.floor(Math.random() * 4);
+            var x; // Posición X
+            var y; // Posición Y
+            switch (numberRandom) {
+                case 0:
+                    y = 0;
+                    x = Phaser.Math.Between(-30, game.config.width + 300);
+                    break;
+                case 1:
+                    y = game.config.height;
+                    x = Phaser.Math.Between(-30, game.config.width + 300);
+                    break;
+                case 2:
+                    y = Phaser.Math.Between(-30, game.config.height + 300);
+                    x = 0;
+                    break;
+                case 3:
+                    y = Phaser.Math.Between(-30, game.config.height + 300);
+                    x = game.config.width;
+                    break;
+                default:
+                    y = Phaser.Math.Between(-30, game.config.height + 300);
+                    x = 0;
+                    break;
+            }
 
             var angle = Math.atan2(300 - y, 400 - x); // Ángulo hacia el centro
             var velocity = 200; // Velocidad constante
@@ -108,36 +129,55 @@
             var velocityX = velocity * Math.cos(angle); // Velocidad en el eje X para moverlo hacia el centro
             var velocityY = velocity * Math.sin(angle); // Velocidad en el eje Y para moverlo hacia el centro
 
-            projectile =  crearProjectile(x, y, physics);
+            projectile = crearProjectile(x, y, physics);
+            physics.add.collider(projectile, planet, eliminarProjectile)
             projectile.setVelocity(velocityX, velocityY);
 
         }
 
+        function eliminarProjectile(projectile, planet) {
+            
+        }
+
 
         function update() {
+            planet.body.stop()
+            planet.body.x = 400;
+            planet.body.y = 300;
             if (cursors.right.isDown) {
                 let angle = Math.atan2(player.y - 300, player.x - 400);
                 angle += 0.03; // Ajusta la velocidad de rotación
 
-                player.x = 400 + 120 * Math.cos(angle);
-                player.y = 300 + 120 * Math.sin(angle);
+                player.x = 400 + 60 * Math.cos(angle);
+                player.y = 300 + 60 * Math.sin(angle);
             }
             else if (cursors.left.isDown) {
                 let angle = Math.atan2(player.y - 300, player.x - 400);
                 angle -= 0.03; // Ajusta la velocidad de rotación
 
-                player.x = 400 + 120 * Math.cos(angle);
-                player.y = 300 + 120 * Math.sin(angle);
-            }
-            else {
-                // console.log(player.x, player.y);
+                player.x = 400 + 60 * Math.cos(angle);
+                player.y = 300 + 60 * Math.sin(angle);
             }
 
             if (this.time.now > lastProjectile + cooldown) {
                 spawnProjectile(this.physics);
                 lastProjectile = this.time.now;
+
             }
         }
+
+        //game over
+        var GameOverScene = new Phaser.Class({
+            Extends: Phaser.Scene,
+            initialize:
+                function GameOverScene() {
+                    Phaser.Scene.call(this, { key: 'GameOverScene' });
+                },
+            create: function () {
+                // Código para mostrar la pantalla de Game Over
+                this.add.text(400, 300, 'Game Over', { fontSize: '64px', fill: '#fff' }).setOrigin(0.5);
+            }
+        });
 
     </script>
 
