@@ -1,212 +1,194 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>Making your first Phaser 3 Game - Part 7</title>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
     <style type="text/css">
-        body {
-            margin: 0;
-        }
+      body {
+        margin: 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <script type="text/javascript">
+      var config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+        physics: {
+          default: "arcade",
+          arcade: {
+            gravity: {},
+            debug: false,
+          },
+        },
+        scene: {
+          preload: preload,
+          create: create,
+          update: update,
+          GameOverScene: GameOverScene,
+        },
+      };
 
-        var config = {
-            type: Phaser.AUTO,
-            width: 800,
-            height: 600,
-            physics: {
-                default: 'arcade',
-                arcade: {
-                    gravity: {},
-                    debug: false
-                }
-            },
-            scene: {
-                preload: preload,
-                create: create,
-                update: update,
-                GameOverScene: GameOverScene
+      var player;
+      var planet;
+      var projectile;
+      var lastAsteroide = 0;
+      var lastDisparo = 0;
+      const cooldownAsteroides = 750;
+      const cooldownDisparos = 300;
+      var cursors = {
+        left: null,
+        right: null,
+        shot: null,
+      };
+      var asteroidesGroup;
+
+      var game = new Phaser.Game(config);
+
+      function preload() {
+        this.load.image("sky", "assets/sky.png");
+        this.load.image("ground", "assets/platform.png");
+        this.load.image("star", "assets/star.png");
+        this.load.spritesheet("planet", "assets/bomb.png", { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet("dude", "assets/dude.png", { frameWidth: 32, frameHeight: 48 });
+      }
+
+      function create() {
+        this.add.image(400, 300, "sky");
+
+        (asteroidesGroup = this.add.group()), (planet = this.physics.add.sprite(400, 300, "planet"));
+        planet.setScale(6);
+
+        // aKey = this.input.keyboard.addKey(Phaser.input.keyboard.keyCodes.A);
+        cursors.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        cursors.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        cursors.shot = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // planet.create(400, 300, 'planet').setScale(6).refreshBody();
+        // planet.setCircle(100, 400, 300)
+
+        player = this.physics.add.sprite(400, 180, "dude");
+
+        player.setCollideWorldBounds(true);
+
+        this.physics.add.collider(player, planet);
+      }
+
+      function crearProjectile(x, y, physics) {
+        let proyectil = physics.add.sprite(x, y, "planet");
+        proyectil.setBounce(10);
+        asteroidesGroup.add(proyectil);
+        return proyectil; // Devuelve el proyectil creado
+      }
+
+      function spawnProjectile(physics) {
+        var numberRandom = Math.floor(Math.random() * 4);
+        var x; // Posición X
+        var y; // Posición Y
+        switch (numberRandom) {
+          case 0:
+            y = 0;
+            x = Phaser.Math.Between(-30, game.config.width + 300);
+            break;
+          case 1:
+            y = game.config.height;
+            x = Phaser.Math.Between(-30, game.config.width + 300);
+            break;
+          case 2:
+            y = Phaser.Math.Between(-30, game.config.height + 300);
+            x = 0;
+            break;
+          case 3:
+            y = Phaser.Math.Between(-30, game.config.height + 300);
+            x = game.config.width;
+            break;
+          default:
+            y = Phaser.Math.Between(-30, game.config.height + 300);
+            x = 0;
+            break;
+        }
+
+        var angle = Math.atan2(300 - y, 400 - x); // Ángulo hacia el centro
+        var velocity = 100; // Velocidad constante
+
+        var velocityX = velocity * Math.cos(angle); // Velocidad en el eje X para moverlo hacia el centro
+        var velocityY = velocity * Math.sin(angle); // Velocidad en el eje Y para moverlo hacia el centro
+
+        projectile = crearProjectile(x, y, physics);
+        physics.add.collider(projectile, planet, eliminarProjectile);
+        projectile.setVelocity(velocityX, velocityY);
+      }
+
+      function eliminarProjectile(projectile, planet) {}
+
+      function disparar(x, y, physics) {
+        let cohete = physics.add.sprite(player.x, player.y, "star");
+        cohete.x = player.x;
+        cohete.y = player.y;
+
+        physics.add.collider(cohete, asteroidesGroup, destruirCohete);
+
+        physics.moveTo(cohete, x, y, 200);
+      }
+
+      function destruirCohete(cohete) {
+        cohete.destroy();
+      }
+
+      function update() {
+        planet.body.stop();
+        planet.body.x = 400;
+        planet.body.y = 300;
+        if (cursors.right.isDown) {
+          let angle = Math.atan2(player.y - 300, player.x - 400);
+          angle += 0.03; // Ajusta la velocidad de rotación
+
+          player.x = 400 + 60 * Math.cos(angle);
+          player.y = 300 + 60 * Math.sin(angle);
+        } else if (cursors.left.isDown) {
+          let angle = Math.atan2(player.y - 300, player.x - 400);
+          angle -= 0.03; // Ajusta la velocidad de rotación
+
+          player.x = 400 + 60 * Math.cos(angle);
+          player.y = 300 + 60 * Math.sin(angle);
+        }
+        if (cursors.shot.isDown) {
+          if (this.time.now > lastDisparo + cooldownDisparos) {
+            let angle = Math.atan2(player.y - 300, player.x - 400);
+            let x = player.x;
+            let y = player.y;
+            while (x >= 0 && x <= game.config.width && y >= 0 && y <= game.config.height) {
+              x += 10 * Math.cos(angle);
+              y += 10 * Math.sin(angle);
             }
-        };
+            x -= 10 * Math.cos(angle);
+            y -= 10 * Math.sin(angle);
 
-        var player;
-        var planet;
-        var projectile;
-        var lastAsteroide = 0;
-        var lastDisparo = 0;
-        const cooldownAsteroides = 750;
-        const cooldownDisparos = 300;
-        var cursors = {
-            left: null,
-            right: null,
-            shot: null
-        }
-        var asteroidesGroup;
-        
-        var game = new Phaser.Game(config);
-        
-        function preload() {
-            this.load.image('sky', 'assets/sky.png');
-            this.load.image('ground', 'assets/platform.png');
-            this.load.image('star', 'assets/star.png');
-            this.load.spritesheet('planet', 'assets/bomb.png', { frameWidth: 32, frameHeight: 48 });
-            this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-        }
-        
-        function create() {
-            this.add.image(400, 300, 'sky');
-
-            asteroidesGroup = this.add.group(),
-
-            planet = this.physics.add.sprite(400, 300, 'planet');
-            planet.setScale(6);
-
-            // aKey = this.input.keyboard.addKey(Phaser.input.keyboard.keyCodes.A);
-            cursors.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-            cursors.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-            cursors.shot = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
-            // planet.create(400, 300, 'planet').setScale(6).refreshBody();
-            // planet.setCircle(100, 400, 300)
-
-            player = this.physics.add.sprite(400, 180, 'dude');
-
-            player.setCollideWorldBounds(true);
-
-
-            this.physics.add.collider(player, planet);
+            disparar(x, y, this.physics);
+            lastDisparo = this.time.now;
+          }
         }
 
-        function crearProjectile(x, y, physics) {
-            let proyectil = physics.add.sprite(x, y, 'planet');
-            proyectil.setBounce(10)
-            asteroidesGroup.add(proyectil)
-            return proyectil; // Devuelve el proyectil creado
+        if (this.time.now > lastAsteroide + cooldownAsteroides) {
+          spawnProjectile(this.physics);
+          lastAsteroide = this.time.now;
         }
+      }
 
-        function spawnProjectile(physics) {
-            var numberRandom = Math.floor(Math.random() * 4);
-            var x; // Posición X
-            var y; // Posición Y
-            switch (numberRandom) {
-                case 0:
-                    y = 0;
-                    x = Phaser.Math.Between(-30, game.config.width + 300);
-                    break;
-                case 1:
-                    y = game.config.height;
-                    x = Phaser.Math.Between(-30, game.config.width + 300);
-                    break;
-                case 2:
-                    y = Phaser.Math.Between(-30, game.config.height + 300);
-                    x = 0;
-                    break;
-                case 3:
-                    y = Phaser.Math.Between(-30, game.config.height + 300);
-                    x = game.config.width;
-                    break;
-                default:
-                    y = Phaser.Math.Between(-30, game.config.height + 300);
-                    x = 0;
-                    break;
-            }
-
-            var angle = Math.atan2(300 - y, 400 - x); // Ángulo hacia el centro
-            var velocity = 100; // Velocidad constante
-
-            var velocityX = velocity * Math.cos(angle); // Velocidad en el eje X para moverlo hacia el centro
-            var velocityY = velocity * Math.sin(angle); // Velocidad en el eje Y para moverlo hacia el centro
-
-            projectile = crearProjectile(x, y, physics);
-            physics.add.collider(projectile, planet, eliminarProjectile)
-            projectile.setVelocity(velocityX, velocityY);
-
-        }
-
-        function eliminarProjectile(projectile, planet) {
-
-        }
-
-        function disparar(x, y, physics){
-            let cohete = physics.add.sprite(player.x, player.y, 'star');
-            cohete.x = player.x;
-            cohete.y = player.y;
-
-            physics.add.collider(cohete, asteroidesGroup, destruirCohete)
-
-            physics.moveTo(cohete, x, y, 200);
-
-        }
-
-        function destruirCohete(cohete){
-            cohete.destroy() ;
-        }
-
-
-        function update() {
-            planet.body.stop()
-            planet.body.x = 400;
-            planet.body.y = 300;
-            if (cursors.right.isDown) {
-                let angle = Math.atan2(player.y - 300, player.x - 400);
-                angle += 0.03; // Ajusta la velocidad de rotación
-
-                player.x = 400 + 60 * Math.cos(angle);
-                player.y = 300 + 60 * Math.sin(angle);
-            }
-            else if (cursors.left.isDown) {
-                let angle = Math.atan2(player.y - 300, player.x - 400);
-                angle -= 0.03; // Ajusta la velocidad de rotación
-
-                player.x = 400 + 60 * Math.cos(angle);
-                player.y = 300 + 60 * Math.sin(angle);
-            }
-            if(cursors.shot.isDown){
-                if (this.time.now > lastDisparo + cooldownDisparos) {
-                    let angle = Math.atan2(player.y - 300, player.x - 400);
-                    let x = player.x;
-                    let y = player.y;
-                    while (x >= 0 && x <= game.config.width && y >= 0 && y <= game.config.height) {
-                        x += 10 * Math.cos(angle);
-                        y += 10 * Math.sin(angle);
-                    }
-                    x -= 10 * Math.cos(angle);
-                    y -= 10 * Math.sin(angle);
-
-                    disparar(x, y, this.physics)
-                lastDisparo = this.time.now;
-
-            }
-            }
-
-            if (this.time.now > lastAsteroide + cooldownAsteroides) {
-                spawnProjectile(this.physics);
-                lastAsteroide = this.time.now;
-
-            }
-        }
-
-        //game over
-        var GameOverScene = new Phaser.Class({
-            Extends: Phaser.Scene,
-            initialize:
-                function GameOverScene() {
-                    Phaser.Scene.call(this, { key: 'GameOverScene' });
-                },
-            create: function () {
-                // Código para mostrar la pantalla de Game Over
-                this.add.text(400, 300, 'Game Over', { fontSize: '64px', fill: '#fff' }).setOrigin(0.5);
-            }
-        });
-
+      //game over
+      var GameOverScene = new Phaser.Class({
+        Extends: Phaser.Scene,
+        initialize: function GameOverScene() {
+          Phaser.Scene.call(this, { key: "GameOverScene" });
+        },
+        create: function () {
+          // Código para mostrar la pantalla de Game Over
+          this.add.text(400, 300, "Game Over", { fontSize: "64px", fill: "#fff" }).setOrigin(0.5);
+        },
+      });
     </script>
-
-</body>
-
+  </body>
 </html>
