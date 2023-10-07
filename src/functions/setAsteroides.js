@@ -6,7 +6,7 @@ const array = [];
 async function crearAsteroide() {
   try {
     const respuesta = await getApi(
-      "https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-08&api_key="
+      "https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-07&api_key="
     );
 
     const nearEarthObjects = respuesta["near_earth_objects"];
@@ -47,8 +47,7 @@ async function crearAsteroide() {
     console.error(error);
   }
 }
-let asteroide_test = new Asteroide("a", "b", "1", "2ms", "1", "1231");
-console.log(asteroide_test);
+
 crearAsteroide();
 
 export default crearAsteroide;
