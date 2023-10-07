@@ -1,19 +1,29 @@
-import getApi from "../utils/getApi.js";
 import Asteroide from "../objects/Asteroide.js";
+
+
 
 const array = [];
 
 async function crearAsteroide() {
   try {
-    const respuesta = await getApi(
-      "https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-07&api_key="
+    const apiKey = "DEMO_KEY"; // Reemplaza esto con tu clave de API de la NASA
+    const startDate = "2015-09-07";
+    const endDate = "2015-09-07";
+
+    const response = await fetch(
+      `https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-07&api_key=yQn0L1akGvnnJ1pDfFsF5qNXtJLxUOR3AOVWUkeo`
     );
 
-    const nearEarthObjects = respuesta["near_earth_objects"];
+    if (!response.ok) {
+      throw new Error("No se pudo obtener la respuesta de la API");
+    }
+
+    const data = await response.json();
+    const nearEarthObjects = data["near_earth_objects"];
     const dateKeys = Object.keys(nearEarthObjects);
 
-    dateKeys.forEach((date) => {
-      const asteroidList = nearEarthObjects[date];
+    dateKeys.forEach((data) => {
+      const asteroidList = nearEarthObjects[data];
 
       asteroidList.forEach((asteroide) => {
         const Asteroide_API = new Asteroide();
@@ -46,8 +56,7 @@ async function crearAsteroide() {
   } catch (error) {
     console.error(error);
   }
-
-  return asteroidList
+  return array;
 }
 
 crearAsteroide();

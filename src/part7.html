@@ -14,8 +14,13 @@
 
 <body>
 
-    <script type="text/javascript">
+    <script type="module">
 
+        //import axios from 'axios';
+        import crearAsteroide from "./functions/setAsteroides.js";
+
+        let array =  await crearAsteroide();
+        console.log(array)
         var config = {
             type: Phaser.AUTO,
             width: 800,
@@ -47,6 +52,7 @@
             this.load.image('sky', 'assets/sky.png');
             this.load.image('ground', 'assets/platform.png');
             this.load.image('star', 'assets/star.png');
+            this.load.spritesheet('asteroid', 'assets/asteroide.png', { frameWidth: 32, frameHeight: 48 });
             this.load.spritesheet('planet', 'assets/bomb.png', { frameWidth: 32, frameHeight: 48 });
             this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
         }
@@ -92,7 +98,7 @@
         }
 
         function crearProjectile(x, y, physics) {
-            let proyectil = physics.add.sprite(x, y, 'planet');
+            let proyectil = physics.add.sprite(x, y, 'asteroid');
             return proyectil; // Devuelve el proyectil creado
         }
 
@@ -123,20 +129,24 @@
                     break;
             }
 
-            var angle = Math.atan2(300 - y, 400 - x); // Ángulo hacia el centro
-            var velocity = 200; // Velocidad constante
+            const randomAsteroidIndex = Math.floor(Math.random() * array.length);
+            const randomAsteroid = array[randomAsteroidIndex];
 
-            var velocityX = velocity * Math.cos(angle); // Velocidad en el eje X para moverlo hacia el centro
-            var velocityY = velocity * Math.sin(angle); // Velocidad en el eje Y para moverlo hacia el centro
+            var angle = Math.atan2(300 - y, 400 - x); // Ángulo hacia el centro
+
+            // Set the velocity of the projectile based on the asteroid's velocity
+            var velocityX = (randomAsteroid.getVelocidad()/ 100) > 200 ? (randomAsteroid.getVelocidad()/ 300) * Math.cos(angle) : (randomAsteroid.getVelocidad()/ 100) * Math.cos(angle); // Velocidad en el eje X para moverlo hacia el centro
+            var velocityY = (randomAsteroid.getVelocidad()/ 100) > 200 ? (randomAsteroid.getVelocidad()/300) * Math.sin(angle) : (randomAsteroid.getVelocidad()/ 100) * Math.cos(angle); // Velocidad en el eje Y para moverlo hacia el centro
+            
 
             projectile = crearProjectile(x, y, physics);
-            physics.add.collider(projectile, planet, eliminarProjectile)
+            physics.add.collider(projectile, planet, eliminarProjectile);
             projectile.setVelocity(velocityX, velocityY);
 
         }
 
         function eliminarProjectile(projectile, planet) {
-            
+
         }
 
 
