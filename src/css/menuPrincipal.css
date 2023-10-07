@@ -7,6 +7,7 @@
   color: white;
   transform: translateY(-100%);
   transition: all 0.3s ease-out;
+  position: relative;
 }
 
 .infoPartida.active {
@@ -58,6 +59,12 @@
   align-items: center;
   justify-content: center;
   gap: 2rem;
+  transform: translateY(0%);
+  transition: all 0.3s ease-out;
+}
+
+.configPartida.active {
+  transform: translateY(100%);
 }
 
 i {
@@ -65,11 +72,21 @@ i {
   color: white;
 }
 
-.fa-circle-xmark {
+#close {
   position: absolute;
   top: 0;
   right: 0;
-  margin: 1rem;
+  height: 100%;
+  padding: 1rem;
+  padding: 1.3rem;
+  cursor: pointer;
+  z-index: 50;
+  transform: translateY(-100%);
+  transition: all 0.3s ease-out;
+}
+
+#close.active {
+  transform: translateY(0%);
 }
 
 .gameOver {
